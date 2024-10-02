@@ -8,6 +8,7 @@ class BSTree {
         T data;
         NodeBT *left;
         NodeBT *right;
+        int Fb;
 
         NodeBT(T value) : data(value), left(nullptr), right(nullptr) {}
     };
@@ -251,25 +252,56 @@ private:
         }
         return current;
     }
+
+
+    int getFB(NodeBT* root){
+
+        if (root == nullptr){
+            return 0;
+        }
+
+        int leftHeight = getFB(root->left);
+        if (leftHeight == -1){
+            return -1;
+        }
+
+        int rightHeight = getFB(root->right);
+            if (rightHeight == -1){
+                return -1;
+            }
+
+
+        int FB = leftHeight - rightHeight;
+        if (abs(FB) > 1){
+            return -1;
+        }
+
+        return max(leftHeight, rightHeight) + 1;
+
+
+
+    }
+
+    bool isBalanced(NodeBT* root){  
+        return getFB(root) != -1;
+    }
+
 };
 
 int main() {
     BSTree<int> tree;
 
-    tree.insert(12);
+    tree.insert(2);
     tree.insert(8);
-    tree.insert(20);
-    tree.insert(5);
+    tree.insert(3);
+    tree.insert(4);
+    tree.insert(6);
+    tree.insert(10);
     tree.insert(1);
-    tree.insert(15);
-    tree.insert(25);
+    tree.insert(5);
     tree.insert(7);
-    tree.insert(11);
     tree.insert(9);
-    tree.insert(13);
-    tree.insert(22);
-    tree.insert(18);
-    tree.insert(26);
+
 
 
     cout << "\nrecorrido inorder: ";
@@ -284,7 +316,7 @@ int main() {
     cout << "\nrecorrido BFS: ";
     tree.BFS();
 
-    cout << "recorrido DFS (esperado: 10 5 3 7 15 12 18): ";
+    cout << "recorrido DFS: ";
     tree.DFS();
 
     if (tree.find(7)) {
@@ -295,7 +327,6 @@ int main() {
 
     tree.remove(3);
     tree.inorder();
-
 
 
 }
