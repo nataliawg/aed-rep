@@ -1,0 +1,42 @@
+#include <iostream>
+#include <vector>
+using namespace std;
+
+
+class Solution {
+    vector<Node*> clones; 
+
+public:
+    Solution() : clones(101, nullptr) {} 
+
+    Node* cloneGraph(Node* node) {
+        if (!node) return nullptr;
+
+        if (clones[node->val] != nullptr) {
+            return clones[node->val];
+        }
+
+        Node* cloneNode = new Node(node->val);
+        clones[node->val] = cloneNode; 
+
+        for (Node* neighbor : node->neighbors) {
+            cloneNode->neighbors.push_back(cloneGraph(neighbor));
+        }
+
+        return cloneNode;
+    }
+};
+
+void printGraph(Node* node, vector<bool>& visited) {
+    if (!node || visited[node->val]) return;
+    visited[node->val] = true;
+    cout << "Node " << node->val << " neighbors: ";
+    for (Node* neighbor : node->neighbors) {
+        cout << neighbor->val << " ";
+    }
+    cout << endl;
+    for (Node* neighbor : node->neighbors) {
+        printGraph(neighbor, visited);
+    }
+}
+
